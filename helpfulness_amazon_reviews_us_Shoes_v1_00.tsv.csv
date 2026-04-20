@@ -1,0 +1,4 @@
+sentiment,mean_helpful,median_helpful,n
+positive,0.745728773671424,1,609445
+negative,0.619754469198957,0.8,156436
+neutral,0.678008154323833,1,99014
