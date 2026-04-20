@@ -1,0 +1,5 @@
+  WARNING: The scripts f2py and numpy-config are installed in '/home/entackett/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+[notice] A new release of pip is available: 24.0 -> 26.0.1
+[notice] To update, run: pip install --upgrade pip

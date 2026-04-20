@@ -1,0 +1,5 @@
+/staging/groups/stat_dscp/group05/amazon_reviews_us_Camera_v1_00.tsv
+/staging/groups/stat_dscp/group05/amazon_reviews_us_Digital_Music_Purchase_v1_00.tsv
+/staging/groups/stat_dscp/group05/amazon_reviews_us_Electronics_v1_00.tsv
+/staging/groups/stat_dscp/group05/amazon_reviews_us_Mobile_Electronics_v1_00.tsv
+/staging/groups/stat_dscp/group05/amazon_reviews_us_Software_v1_00.tsv

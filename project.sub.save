@@ -1,0 +1,16 @@
+universe = vanilla
+executable = project.sh
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+
+transfer_input_files = sample_kaggle.py
+
+output = project.out
+error = project.err
+log = project.log
+
+request_memory = 4GB
+request_disk = 15GB   # IMPORTANT
+
+queue
