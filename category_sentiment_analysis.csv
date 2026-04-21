@@ -1,0 +1,109 @@
+"category","sentiment","count","pct_of_reviews","avg_pct_helpful","median_helpful_votes"
+"Books","Positive",83117,83.1,43.9,1
+"Books","Neutral",7478,7.5,43.3,1
+"Books","Negative",9405,9.4,41.1,1
+"Apparel","Positive",77027,77,80.9,1
+"Apparel","Neutral",9497,9.5,74,1
+"Apparel","Negative",13476,13.5,67.7,2
+"Automotive","Positive",73664,73.7,82.6,3
+"Automotive","Neutral",8333,8.3,73.5,3
+"Automotive","Negative",18003,18,68.5,3
+"Baby","Positive",70265,70.3,88.5,3
+"Baby","Neutral",8318,8.3,78.8,3
+"Baby","Negative",21417,21.4,72.8,3
+"Beauty","Positive",77205,77.2,84.7,3
+"Beauty","Neutral",7382,7.4,71.8,3
+"Beauty","Negative",15413,15.4,66.1,3
+"Camera","Positive",75763,75.8,84.6,5
+"Camera","Neutral",8125,8.1,74.9,5
+"Camera","Negative",16112,16.1,68.6,5
+"Digital_Ebook_Purchase","Positive",69708,69.7,73,2
+"Digital_Ebook_Purchase","Neutral",9822,9.8,64.5,2
+"Digital_Ebook_Purchase","Negative",20470,20.5,58.5,4
+"Digital_Music_Purchase","Positive",86996,87,82.4,2
+"Digital_Music_Purchase","Neutral",4679,4.7,55.7,2
+"Digital_Music_Purchase","Negative",8325,8.3,47.3,2
+"Digital_Software","Positive",61884,61.9,50.6,1
+"Digital_Software","Neutral",8132,8.1,61.2,1
+"Digital_Software","Negative",29984,30,75.5,2
+"Digital_Video_Download","Positive",69816,69.8,62.1,1
+"Digital_Video_Download","Neutral",9239,9.2,46,1
+"Digital_Video_Download","Negative",20945,20.9,37.4,2
+"Digital_Video_Games","Positive",67677,67.7,63.3,1
+"Digital_Video_Games","Neutral",8692,8.7,55.5,1
+"Digital_Video_Games","Negative",23631,23.6,47.5,1
+"Electronics","Positive",66583,66.6,81.8,4
+"Electronics","Neutral",9291,9.3,73.8,4
+"Electronics","Negative",24126,24.1,66.8,4
+"Furniture","Positive",71781,71.8,86.8,3
+"Furniture","Neutral",9783,9.8,80.8,3
+"Furniture","Negative",18436,18.4,76.8,3
+"Gift Card","Positive",93124,93.1,74.8,1
+"Gift Card","Neutral",2301,2.3,58.1,1
+"Gift Card","Negative",4575,4.6,52.9,1
+"Grocery","Positive",81741,81.7,85,2
+"Grocery","Neutral",6519,6.5,64.9,2
+"Grocery","Negative",11740,11.7,57,3
+"Health & Personal Care","Positive",76643,76.6,82.8,3
+"Health & Personal Care","Neutral",6826,6.8,70.3,3
+"Health & Personal Care","Negative",16531,16.5,65.1,4
+"Major Appliances","Positive",64862,66.9,78.1,2
+"Major Appliances","Neutral",6718,6.9,72.2,2
+"Major Appliances","Negative",25321,26.1,75.7,3
+"Mobile_Apps","Positive",61324,61.3,56.1,1
+"Mobile_Apps","Neutral",9946,9.9,50.5,1
+"Mobile_Apps","Negative",28730,28.7,41.2,1
+"Mobile_Electronics","Positive",66894,66.9,77.6,1
+"Mobile_Electronics","Neutral",9349,9.3,67,1
+"Mobile_Electronics","Negative",23757,23.8,62.4,1
+"Music","Positive",88340,88.3,79.2,2
+"Music","Neutral",5061,5.1,53.1,2
+"Music","Negative",6599,6.6,37.5,2
+"Musical Instruments","Positive",78157,78.2,83,3
+"Musical Instruments","Neutral",8145,8.1,68.8,3
+"Musical Instruments","Negative",13698,13.7,60.4,3
+"Office Products","Positive",63907,63.9,84.9,5
+"Office Products","Neutral",9090,9.1,79.4,5
+"Office Products","Negative",27003,27,75.2,5
+"Outdoors","Positive",77365,77.4,83.5,3
+"Outdoors","Neutral",8512,8.5,73.4,3
+"Outdoors","Negative",14123,14.1,67.9,4
+"PC","Positive",66623,66.6,81.6,3
+"PC","Neutral",8033,8,74.1,4
+"PC","Negative",25344,25.3,66,4
+"Personal_Care_Appliances","Positive",62554,72.8,83,2
+"Personal_Care_Appliances","Neutral",7050,8.2,69.8,2
+"Personal_Care_Appliances","Negative",16377,19,65.2,2
+"Pet Products","Positive",75329,75.3,88.5,3
+"Pet Products","Neutral",7455,7.5,77,3
+"Pet Products","Negative",17216,17.2,69.6,3
+"Shoes","Positive",79291,79.3,86.2,2
+"Shoes","Neutral",8969,9,78,1
+"Shoes","Negative",11740,11.7,68.9,2
+"Software","Positive",54483,54.5,75.5,4
+"Software","Neutral",9034,9,76.2,4
+"Software","Negative",36483,36.5,76.8,6
+"Sports","Positive",75181,75.2,82.8,3
+"Sports","Neutral",8500,8.5,74.8,3
+"Sports","Negative",16319,16.3,70,4
+"Tools","Positive",77692,77.7,83.3,4
+"Tools","Neutral",7918,7.9,75.6,5
+"Tools","Negative",14390,14.4,69.3,6
+"Toys","Positive",74757,74.8,85.6,4
+"Toys","Neutral",8102,8.1,77.5,4
+"Toys","Negative",17141,17.1,73.4,4
+"Video DVD","Positive",73683,73.7,62.7,2
+"Video DVD","Neutral",9755,9.8,54.8,2
+"Video DVD","Negative",16562,16.6,44.5,4
+"Video Games","Positive",74394,74.4,68.1,2
+"Video Games","Neutral",9021,9,56.2,2
+"Video Games","Negative",16585,16.6,46.5,2
+"Video","Positive",79953,80,69.4,3
+"Video","Neutral",8103,8.1,56.9,2
+"Video","Negative",11944,11.9,44.8,3
+"Watches","Positive",77667,77.7,82.8,2
+"Watches","Neutral",8212,8.2,70.3,2
+"Watches","Negative",14121,14.1,63.7,2
+"Wireless","Positive",64984,65,82.7,3
+"Wireless","Neutral",10399,10.4,76.1,3
+"Wireless","Negative",24617,24.6,68.5,3

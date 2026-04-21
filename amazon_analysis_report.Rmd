@@ -1,0 +1,242 @@
+---
+title: "Amazon US Customer Reviews — Satisfaction Analysis"
+author: "STAT 405 Group 5"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10, fig.height = 7)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+```{r load-data}
+summary_df  <- read.csv("category_summary_stats.csv", stringsAsFactors = FALSE) %>%
+  distinct(category, .keep_all = TRUE)
+
+sentiment_df <- read.csv("category_sentiment_analysis.csv", stringsAsFactors = FALSE) %>%
+  distinct(category, sentiment, .keep_all = TRUE)
+
+avg_order <- summary_df %>% arrange(avg_rating) %>% pull(category)
+top_cat   <- summary_df %>% arrange(desc(avg_rating)) %>% slice(1)
+bot_cat   <- summary_df %>% arrange(avg_rating) %>% slice(1)
+most_polar <- summary_df %>% arrange(desc(variance)) %>% slice(1)
+best_corr  <- summary_df %>% arrange(corr_length_rating) %>% slice(1)
+```
+
+```{r theme}
+theme_amazon <- function() {
+  theme_minimal(base_family = "sans") +
+    theme(
+      plot.background  = element_rect(fill = "white", color = NA),
+      panel.background = element_rect(fill = "#F8F9FA", color = NA),
+      panel.grid.major = element_line(color = "#E9ECEF", linewidth = 0.4),
+      panel.grid.minor = element_blank(),
+      axis.text        = element_text(size = 9, color = "#495057"),
+      axis.title       = element_text(size = 10, color = "#212529", face = "bold"),
+      plot.title       = element_text(size = 13, face = "bold", color = "#1D3557", margin = margin(b = 6)),
+      plot.subtitle    = element_text(size = 10, color = "#6C757D", margin = margin(b = 10)),
+      legend.position  = "bottom",
+      plot.margin      = margin(16, 16, 16, 16)
+    )
+}
+```
+
+## Overview
+
+This report analyzes customer satisfaction across **`r nrow(summary_df)` Amazon product categories** using a sample of 100,000 reviews per category (~3.6 million reviews total). We examine star ratings, review sentiment, helpful vote patterns, and statistical relationships between review characteristics and satisfaction.
+
+| Metric | Value |
+|--------|-------|
+| Categories analyzed | `r nrow(summary_df)` |
+| Reviews per category | ~100,000 |
+| Highest rated category | `r top_cat$category` (`r round(top_cat$avg_rating, 2)` ★) |
+| Lowest rated category | `r bot_cat$category` (`r round(bot_cat$avg_rating, 2)` ★) |
+| T-statistic (top vs bottom) | 243.03 |
+| Chi-square statistic | 127,128 |
+
+---
+
+## 1. Which categories satisfy customers the most?
+
+Average star rating across 100,000 reviews per category, ranked from lowest to highest.
+
+```{r plot1}
+summary_df %>%
+  arrange(avg_rating) %>%
+  mutate(category = factor(category, levels = category)) %>%
+  ggplot(aes(x = avg_rating, y = category, fill = avg_rating)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf("%.2f", avg_rating)), hjust = -0.15, size = 3, color = "#212529") +
+  scale_fill_gradient(low = "#ADB5BD", high = "#1D3557", guide = "none") +
+  scale_x_continuous(limits = c(0, 5.4), breaks = 1:5) +
+  labs(title = "Average Star Rating by Product Category",
+       subtitle = "Based on 100,000 reviews per category",
+       x = "Average Star Rating", y = NULL) +
+  theme_amazon()
+```
+
+> **Finding:** **`r top_cat$category`** leads with `r round(top_cat$avg_rating, 2)` ★ while **`r bot_cat$category`** is lowest at `r round(bot_cat$avg_rating, 2)` ★ — a gap of `r round(top_cat$avg_rating - bot_cat$avg_rating, 2)` stars. Gift Cards, Music, and Digital Music dominate the top while Software, Mobile Apps, and Office Products rank at the bottom.
+
+---
+
+## 2. Which categories are the most polarizing?
+
+Variance measures how spread out ratings are. High variance means customers either love or hate the products — lots of 1-star and 5-star reviews with little in between.
+
+```{r plot2}
+summary_df %>%
+  arrange(desc(variance)) %>%
+  mutate(category = factor(category, levels = category)) %>%
+  ggplot(aes(x = variance, y = category, fill = variance)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf("%.2f", variance)), hjust = -0.15, size = 3, color = "#212529") +
+  scale_fill_gradient(low = "#A8DADC", high = "#E63946", guide = "none") +
+  scale_x_continuous(limits = c(0, 3.3)) +
+  labs(title = "Rating Variance by Category",
+       subtitle = "Higher variance = more polarizing reviews",
+       x = "Variance of Star Ratings", y = NULL) +
+  theme_amazon()
+```
+
+> **Finding:** **`r most_polar$category`** is the most polarizing category (variance = `r round(most_polar$variance, 2)`), meaning customers have very divided opinions. **Gift Card** is the least polarizing (variance = `r round(summary_df %>% arrange(variance) %>% slice(1) %>% pull(variance), 2)`) — almost everyone gives it 5 stars.
+
+---
+
+## 3. Sentiment breakdown — positive, neutral, and negative
+
+Reviews grouped by sentiment: Positive (4–5 stars), Neutral (3 stars), Negative (1–2 stars).
+
+```{r plot3}
+sentiment_df %>%
+  mutate(
+    sentiment = factor(sentiment, levels = c("Positive", "Neutral", "Negative")),
+    category  = factor(category, levels = avg_order)
+  ) %>%
+  ggplot(aes(x = pct_of_reviews, y = category, fill = sentiment)) +
+  geom_col(width = 0.7) +
+  scale_fill_manual(values = c(Positive = "#2E86AB", Neutral = "#A8DADC", Negative = "#E63946"),
+                    name = "Sentiment") +
+  scale_x_continuous(labels = function(x) paste0(x, "%")) +
+  labs(title = "Sentiment Breakdown by Category",
+       subtitle = "Positive = 4–5 stars | Neutral = 3 stars | Negative = 1–2 stars",
+       x = "Percentage of Reviews", y = NULL) +
+  theme_amazon()
+```
+
+> **Finding:** Most categories are dominated by positive reviews. Software, Digital Software, and Mobile Apps have the highest proportions of negative reviews. Gift Cards are almost entirely positive.
+
+---
+
+## 4. Are negative reviews found more helpful than positive ones?
+
+Comparing the average percentage of helpful votes received by positive vs negative reviews.
+
+```{r plot4}
+sentiment_df %>%
+  filter(sentiment %in% c("Positive", "Negative")) %>%
+  na.omit() %>%
+  mutate(category = factor(category, levels = avg_order)) %>%
+  ggplot(aes(x = avg_pct_helpful, y = category, fill = sentiment)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
+  scale_fill_manual(values = c(Positive = "#2E86AB", Negative = "#E63946"), name = "Sentiment") +
+  scale_x_continuous(labels = function(x) paste0(x, "%")) +
+  labs(title = "Average % Helpful Votes: Positive vs Negative Reviews",
+       subtitle = "Are negative reviews found more useful by other customers?",
+       x = "Average % Helpful Votes", y = NULL) +
+  theme_amazon()
+```
+
+> **Finding:** Across most categories, positive reviews receive a higher percentage of helpful votes than negative reviews. Customers tend to find reviews that match the general satisfaction level more useful, likely because the majority of buyers are satisfied and validate positive experiences.
+
+---
+
+## 5. Does review length predict star rating?
+
+Pearson correlation between review character length and star rating. A negative correlation means longer reviews tend to have lower ratings.
+
+```{r plot5}
+summary_df %>%
+  arrange(corr_length_rating) %>%
+  mutate(
+    category  = factor(category, levels = category),
+    direction = ifelse(corr_length_rating < 0, "Negative", "Positive")
+  ) %>%
+  ggplot(aes(x = corr_length_rating, y = category, fill = direction)) +
+  geom_col(width = 0.7) +
+  geom_vline(xintercept = 0, color = "#212529", linewidth = 0.5) +
+  scale_fill_manual(values = c(Negative = "#E63946", Positive = "#2E86AB"), guide = "none") +
+  labs(title = "Correlation: Review Length vs Star Rating",
+       subtitle = "Negative = longer reviews tend to have lower star ratings",
+       x = "Pearson Correlation Coefficient", y = NULL) +
+  theme_amazon()
+```
+
+> **Finding:** **`r best_corr$category`** has the strongest negative correlation (r = `r round(best_corr$corr_length_rating, 4)`, p < 0.001). Almost all categories show a negative correlation, confirming that unhappy customers consistently write longer reviews.
+
+---
+
+## 6. How well does review length predict star rating? (Regression)
+
+R² from a simple linear regression of star rating on review length. Low R² means review length alone is a weak predictor of rating.
+
+```{r plot6}
+summary_df %>%
+  arrange(desc(regression_r2)) %>%
+  mutate(category = factor(category, levels = category)) %>%
+  ggplot(aes(x = regression_r2, y = category, fill = regression_r2)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf("%.4f", regression_r2)), hjust = -0.15, size = 3, color = "#212529") +
+  scale_fill_gradient(low = "#A8DADC", high = "#1D3557", guide = "none") +
+  scale_x_continuous(limits = c(0, 0.065)) +
+  labs(title = "Regression R² — Review Length Predicting Star Rating",
+       subtitle = "How much of rating variation is explained by review length alone",
+       x = "R² (coefficient of determination)", y = NULL) +
+  theme_amazon()
+```
+
+> **Finding:** All R² values are below 0.06, meaning review length explains less than 6% of the variation in star ratings. While statistically significant (p < 0.001 for most categories), the relationship is practically weak — product quality drives satisfaction far more than writing style.
+
+---
+
+## 7. Statistical Significance Tests
+
+```{r stats-table}
+stats_table <- data.frame(
+  Test = c("T-Test", "Chi-Square Test", "Correlation Range", "Regression R²"),
+  Result = c("t = 243.03", "χ² = 127,128", "−0.23 to +0.05", "< 0.06"),
+  Details = c(
+    "Gift Card vs Software — p-value ≈ 0",
+    "Positive vs Negative across all categories — df = 35, p ≈ 0",
+    "Review length vs star rating across all 37 categories",
+    "Review length explains less than 6% of rating variance"
+  )
+)
+knitr::kable(stats_table, col.names = c("Test", "Result", "Details"))
+```
+
+> **Interpretation:** The t-test (p ≈ 0) confirms the difference in average ratings between the highest and lowest categories is statistically significant. The chi-square test (p ≈ 0) confirms that the distribution of positive vs negative reviews differs significantly across all categories. These differences are not due to random chance.
+
+---
+
+## Key Conclusions
+
+- **Gift Cards, Music, and Digital Music** have the highest average star ratings,
+  while **Software, Mobile Apps, and Office Products** have the lowest.
+- **Positive reviews receive a higher percentage of helpful votes** than negative
+  ones across most categories, suggesting customers tend to validate reviews that
+  match the general satisfaction level.
+- **Most categories show a negative correlation** between review length and star
+  rating, meaning longer reviews are statistically associated with lower ratings.
+  A few tech categories (Electronics, Camera, Digital Ebook Purchase) show a
+  slight positive correlation.
+- **Review length is a weak predictor of rating** (R² < 0.06) — while the
+  relationship is statistically significant, it explains less than 6% of the
+  variation in star ratings.
+- The **t-test** (t = 243.03, p ≈ 0) confirms the difference in average ratings
+  between the highest and lowest rated categories is statistically significant.
+- The **chi-square test** (χ² = 127,128, p ≈ 0) confirms the distribution of
+  positive vs negative reviews differs significantly across all categories.
+*STAT 405 Group 5 · Amazon US Customer Reviews Dataset · Kaggle (cynthiarempel) · Analysis based on 100,000 reviews per category*
